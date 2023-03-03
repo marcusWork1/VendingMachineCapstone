@@ -97,7 +97,7 @@ public class VendingMachineCLI {
 		if (remainingStock == 0) {
 			System.out.println("SOLD OUT");
 		}
-		Scanner vendingList = new Scanner("vendingmachine.csv");
+		/* Scanner vendingList = new Scanner("vendingmachine.csv");
 		while (vendingList.hasNextLine()) ;
 
 		// create String to hold a line from file
@@ -112,7 +112,7 @@ public class VendingMachineCLI {
 		String itemName = vendingDetails[1];
 		Double price = Double.parseDouble(vendingDetails[2]);
 		String itemType = vendingDetails[3];
-
+*/
 
 		// if (vendingDetails[3].contentEquals("Chip")) { // for determining snack type
 		// }
@@ -137,7 +137,7 @@ public class VendingMachineCLI {
 								break;                    // Exit switch statement
 
 							case SECOND_MENU_OPTION_SELECT_PRODUCT:
-								purchaseItems();// invoke method to purchase items from Vending Machine
+								SelectProduct();// invoke method to purchase items from Vending Machine
 								break;                    // Exit switch statement
 
 							case SECOND_MENU_OPTION_FINISH_TRANSACTION:
@@ -167,32 +167,62 @@ public class VendingMachineCLI {
 
 			} // END OF PURCHASE ITEMS
 	public void moneyEntered() throws IOException {
-		System.out.println("Feed Money. Please use $1, $2, $5, $10.");
+		 // boolean enteredDollars = true;
+
+		// scanner to collect user input
 		Scanner moneyGiven = new Scanner(System.in);
+		// variable to hold total balance each time
+		double totalBalance = 0;
+		// boolean to establish if adding more money
+		boolean moreMoney = true;
+		// while loop if we are adding more money
+		while (moreMoney){
+		System.out.println("Feed Money. Please use $1, $2, $5, $10.");
+		// variable to hold balance collected each time
+		double currentBalance = Integer.parseInt(moneyGiven.nextLine());
+		// total balance defined
+		totalBalance += currentBalance;
+		System.out.println("Would you like to enter more money?");
 
-		// boolean enteredDollars;
-
-		int dollarsEntered = Integer.parseInt(moneyGiven.nextLine());
-		ArrayList<Integer> moneyAccumulated = new ArrayList<>();
-
-
-		// while (enteredDollars = true)
-			moneyAccumulated.add(dollarsEntered);
-		int sum = 0;
-
-		for (int i = 0; i < moneyAccumulated.size(); i++) {
-
-		} System.out.println("Current Money Provided " + "$" + sum);
-
-
-
-		System.out.println("Would you like to feed more money? y/n?");
-		if (moneyGiven.nextLine().toLowerCase() == "y") {
-			moneyEntered();
-		} else {
-
+		// more money is false, break the while-loop
+		if (moneyGiven.nextLine().toLowerCase().equals("n")) {
+			moreMoney = false;
+		}
+		}
+		// display balance along with the menu
+		System.out.println("Current Money Provided: " + "$" + totalBalance);
 
 		}
+
+		public void SelectProduct() throws IOException {
+			BufferedReader readFile = new BufferedReader(new FileReader("vendingmachine.csv"));
+			String line;
+			int remainingStock = 5; // come back here to change amount remaining in stock
+			while ((line = readFile.readLine()) != null) {
+				// for loop to count number of items remaining
+				System.out.println(line + "," + remainingStock);
+			}
+
+			// if (remainingStock == 0) {
+				//System.out.println("SOLD OUT");
+			// }
+			Scanner vendingList = new Scanner("vendingmachine.csv");
+			while (vendingList.hasNextLine()) ;
+
+			// create String to hold a line from file
+			String snackDetails = vendingList.nextLine();
+
+			// break the line from the file into values
+			String[] vendingDetails = snackDetails.split(",");
+
+			// assign vairables to each line item
+
+			String location = vendingDetails[0];
+			String itemName = vendingDetails[1];
+			Double price = Double.parseDouble(vendingDetails[2]);
+			String itemType = vendingDetails[3];
+
+
 	}
 
 			public void endMethodProcessing () { // static attribute used as method is not associated with specific object instance
