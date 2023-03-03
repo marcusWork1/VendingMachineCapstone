@@ -14,6 +14,8 @@ import com.techelevator.view.Menu;         // Gain access to Menu class provided
 import org.w3c.dom.ls.LSOutput;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class VendingMachineCLI {
@@ -131,7 +133,7 @@ public class VendingMachineCLI {
 						switch (choice) {                  // Process based on user menu choice
 
 							case SECOND_MENU_OPTION_FEED_MONEY:
-								displayItems();           // invoke method to display items in Vending Machine
+								moneyEntered();          // invoke method to take in money
 								break;                    // Exit switch statement
 
 							case SECOND_MENU_OPTION_SELECT_PRODUCT:
@@ -149,25 +151,6 @@ public class VendingMachineCLI {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 				// Code to purchase items from Vending Machine
 				// System.out.println("(1) Feed Money" + "/n" + "(2) Select Product" + "/n"  + "(3) Finish Transaction");
 
@@ -175,7 +158,6 @@ public class VendingMachineCLI {
 
 
 				// prompt user for how much money they are entering, only accept 1 2 5 10;
-				// System.out.println("Give me your money. We only accept $1, $2, $5, $10.");
 				// Menu moneyEntered = new Menu(System.in, System.out);
 				// Scanner userInputSecondMenu = new Scanner(System.in);
 
@@ -184,6 +166,34 @@ public class VendingMachineCLI {
 				// scanner for how much money put in
 
 			} // END OF PURCHASE ITEMS
+	public void moneyEntered() throws IOException {
+		System.out.println("Feed Money. Please use $1, $2, $5, $10.");
+		Scanner moneyGiven = new Scanner(System.in);
+
+		// boolean enteredDollars;
+
+		int dollarsEntered = Integer.parseInt(moneyGiven.nextLine());
+		ArrayList<Integer> moneyAccumulated = new ArrayList<>();
+
+
+		// while (enteredDollars = true)
+			moneyAccumulated.add(dollarsEntered);
+		int sum = 0;
+
+		for (int i = 0; i < moneyAccumulated.size(); i++) {
+
+		} System.out.println("Current Money Provided " + "$" + sum);
+
+
+
+		System.out.println("Would you like to feed more money? y/n?");
+		if (moneyGiven.nextLine().toLowerCase() == "y") {
+			moneyEntered();
+		} else {
+
+
+		}
+	}
 
 			public void endMethodProcessing () { // static attribute used as method is not associated with specific object instance
 				// Any processing that needs to be done before method ends
