@@ -15,13 +15,18 @@ import com.techelevator.view.Menu;         // Gain access to Menu class provided
 import java.io.*;
 import java.util.*;
 
-public class VendingMachineCLI {
+public class VendingMachineCLI  {
 
 	// Main menu options defined as constants
 	 private double totalBalance;
 	private double currentBalance;
+	private double remainingMoney;
+	private double price;
+	private String itemName;
+	private String itemType;
 	private Map<String, ArrayList<String>> inventoryLog = new TreeMap<>();
 	private List locationElements;
+	private ArrayList chosenItemInfo;
 	private int remainingStock = 5;
 	private static final String MAIN_MENU_OPTION_DISPLAY_ITEMS = "Display Vending Machine Items";
 	private static final String MAIN_MENU_OPTION_PURCHASE = "Purchase";
@@ -130,9 +135,6 @@ public class VendingMachineCLI {
 				// for loop to count number of items remaining
 				System.out.println(line + "," + remainingStock);
 			}
-			if (remainingStock == 0) {
-				System.out.println("SOLD OUT");
-			}
 		/* Scanner vendingList = new Scanner("vendingmachine.csv");
 		while (vendingList.hasNextLine()) ;
 
@@ -238,17 +240,25 @@ public class VendingMachineCLI {
 
 			// location entered in uppercase
 			String snackLocationEntered = locationEntered.nextLine().toUpperCase();
-
+			// arraylist created to hold the inventory information
 			ArrayList<String> chosenItemInfo = inventoryLog.get(snackLocationEntered);
 
+			boolean haveLocation;
 
-			if (chosenItemInfo.get(3) > 0) {
-				return;
-				// reduce the stock
-				// subtract the price
-				// dispense the itemm
+			if (haveLocation = true && remainingStock > 0) {
+			remainingStock= Integer.parseInt(chosenItemInfo.get(3)) - 1;
 
-			}
+
+						// double remainingMoney = totalBalance - price;
+						System.out.println("Found it! You selected " + itemName + " which costs " + price + " and you have " + remainingMoney + " money remaining");
+
+						// reduce the stock
+						// subtract the price
+						// dispense the itemm
+
+				}else {
+					System.out.println("SOLD OUT");
+				}
 		// else statement is sold out
 
 
@@ -309,6 +319,7 @@ public class VendingMachineCLI {
 			}
 		*/
 			// end of while loop
+
 		} // end of selection process!!!
 
 
