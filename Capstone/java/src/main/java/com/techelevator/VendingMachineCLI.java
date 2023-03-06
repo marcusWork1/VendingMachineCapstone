@@ -13,20 +13,26 @@ package com.techelevator;
 import com.techelevator.view.Menu;         // Gain access to Menu class provided for the Capstone
 
 import java.io.*;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.*;
 
 public class VendingMachineCLI  {
+
+/// start of code, our "main"
+	// our attributes we defined and will use in various methods throughout
 
 	// Main menu options defined as constants
 	 private double totalBalance;
 	private double currentBalance;
 	private double remainingMoney;
-	private double price;
+	private String price;
 	private String itemName;
 	private String itemType;
-	private Map<String, ArrayList<String>> inventoryLog = new TreeMap<>();
-	private List locationElements;
-	private ArrayList chosenItemInfo;
+	private Map<String, List <String>> inventoryLog = new TreeMap<>();
+	private List <String> locationElements;
+	private List <String> chosenItemInfo;
 	private int remainingStock = 5;
 	private static final String MAIN_MENU_OPTION_DISPLAY_ITEMS = "Display Vending Machine Items";
 	private static final String MAIN_MENU_OPTION_PURCHASE = "Purchase";
@@ -59,9 +65,10 @@ public class VendingMachineCLI  {
 	 *  Methods should be defined following run() method and invoked from it
 	 *
 	 ***************************************************************************************************************************/
+// our main menu made up of switch and case statements to follow the users next selection in the vending machine
 
 	public void run() throws IOException {
-
+		stockInventory();
 
 		boolean shouldProcess = true;         // Loop control variable
 
@@ -91,77 +98,64 @@ public class VendingMachineCLI  {
 	/********************************************************************************************************
 	 * Methods used to perform processing
 	 ********************************************************************************************************/
-	public void stockInventory() {
-// scan inventory file
-		try (Scanner fileScanner = new Scanner("vendingmachine.csv")) {
+	// stock inventory to hold our Map of inventory information held by the stock list
+	public void stockInventory() throws FileNotFoundException {
+// creating a file object to hold the file before scanning
+		File theFile = new File("vendingmachine.csv");
+
+		// scan inventory file
+		try (Scanner fileScanner = new Scanner(theFile)) {
 
 
-			// read first line
-			String line = fileScanner.nextLine();
 
-// if line is not empty
-			if (line != null) {
+// if line is not empty continue while loop
+			while (fileScanner.hasNextLine()) {
 
-			}
-			// split line up into separate portions
-			String[] vendingDetails = line.split(",");
+				// read line in file
+				String line = fileScanner.nextLine();
 
-			// assign variables to each line item
-			String location = vendingDetails[0];
-			String itemName = vendingDetails[1];
-			Double price = Double.parseDouble(vendingDetails[2]);
-			String itemType = vendingDetails[3];
+				// split line up into separate portions
+				String[] vendingDetails = line.split(",");
+
+				// assign variables to each line item
+				String location = vendingDetails[0];
+				String itemName = vendingDetails[1];
+				String price = vendingDetails[2];
+				String itemType = vendingDetails[3];
 
 // create map that holds a string(Location) and an ArrayList(rest of info)
-			List locationElements = new ArrayList();
-			locationElements.set(0, itemName);
-			locationElements.set(1, price);
-			locationElements.set(2, itemType);
-			locationElements.set(3, remainingStock);
+				List<String> locationElements = new ArrayList();
+				locationElements.add(0, itemName);
+				locationElements.add(1, price);
+				locationElements.add(2, itemType);
+				locationElements.add(3, "5");
+				// locationElements.set(3, remainingStock);
 // add ArrayList locationElements to map value.
-			inventoryLog.put(location, (ArrayList<String>) locationElements);
+				inventoryLog.put(location, locationElements);
 
 
+			}
 		}
 	}
 
 		public void displayItems () throws IOException
-		{      // static attribute used as method is not associated with specific object instance
+		{
 			// Code to display items from Vending Machine
+
+			// BufferedReader reads file
 			BufferedReader readFile = new BufferedReader(new FileReader("vendingmachine.csv"));
+			// string called line to hold what is being read
 			String line;
-			// come back here to change amount remaining in stock
+			// while loop for when file has next line
 			while ((line = readFile.readLine()) != null) {
-				// for loop to count number of items remaining
-				System.out.println(line + "," + remainingStock);
+				// displaying the list line by line
+				System.out.println(line);
 			}
-		/* Scanner vendingList = new Scanner("vendingmachine.csv");
-		while (vendingList.hasNextLine()) ;
-
-		// create String to hold a line from file
-		String snackDetails = vendingList.nextLine();
-
-		// break the line from the file into values
-		String[] vendingDetails = snackDetails.split(",");
-
-		// assign vairables to each line item
-
-		String location = vendingDetails[0];
-		String itemName = vendingDetails[1];
-		Double price = Double.parseDouble(vendingDetails[2]);
-		String itemType = vendingDetails[3];
-*/
-
-			// if (vendingDetails[3].contentEquals("Chip")) { // for determining snack type
-			// }
-
-
-			// need to come back to this
 
 		} // END OF DISPLAYITEMS
 
 		public void purchaseItems () throws IOException
-		{    // static attribute used as method is not associated with specific object instance
+		{    // purchase menu
 
 			boolean shouldProcess = true;         // Loop control variable
 
@@ -188,21 +182,9 @@ public class VendingMachineCLI  {
 			return;                               // End method and return to caller
 
 
-			// Code to purchase items from Vending Machine
-			// System.out.println("(1) Feed Money" + "/n" + "(2) Select Product" + "/n"  + "(3) Finish Transaction");
-
-
-			// prompt user for how much money they are entering, only accept 1 2 5 10;
-			// Menu moneyEntered = new Menu(System.in, System.out);
-			// Scanner userInputSecondMenu = new Scanner(System.in);
-
-
-			// scanner for how much money put in
-
 		} // END OF PURCHASE ITEMS
 
 		public void moneyEntered () throws IOException {
-			// boolean enteredDollars = true;
 
 			// scanner to collect user input
 			Scanner moneyGiven = new Scanner(System.in);
@@ -217,9 +199,12 @@ public class VendingMachineCLI  {
 				double currentBalance = Integer.parseInt(moneyGiven.nextLine());
 				// total balance defined
 				totalBalance += currentBalance;
-				System.out.println("Would you like to enter more money?");
+				// making sure the amount of money is stopped at 2 decimals
+				String.format("%.2f", totalBalance);
+				System.out.println("Would you like to enter more money? (Y/N)");
 
-				// more money is false, break the while-loop
+				// more money is false, break the while-loops
+				// ignores case makes case-insensitive
 				if (moneyGiven.nextLine().equalsIgnoreCase("n")) {
 					moreMoney = false;
 				}
@@ -230,97 +215,79 @@ public class VendingMachineCLI  {
 		}
 
 		public String SelectProduct ()throws IOException {
-			displayItems();
+		// display the inventory log Map
+			System.out.println(inventoryLog);
+
 
 			// output to user
-			System.out.println("Please make a selection, enter a location");
+			System.out.println("Please make a selection, enter a location, or return to main menu (M)");
 
 			// user input
 			Scanner locationEntered = new Scanner(System.in);
 
 			// location entered in uppercase
 			String snackLocationEntered = locationEntered.nextLine().toUpperCase();
-			// arraylist created to hold the inventory information
-			ArrayList<String> chosenItemInfo = inventoryLog.get(snackLocationEntered);
 
-			boolean haveLocation;
+			// if statement for if inventory log contains the location provided via scanner
+			if (inventoryLog.containsKey(snackLocationEntered)) {
+				// get the value in the inventoryLog Map for the key entered
+				inventoryLog.get(snackLocationEntered).get(3);
 
-			if (haveLocation = true && remainingStock > 0) {
-			remainingStock= Integer.parseInt(chosenItemInfo.get(3)) - 1;
+				// variable for the stock remaining string converted into an int
+				int test = Integer.parseInt(inventoryLog.get(snackLocationEntered).get(3));
+				test--; //  stock remaining minus what its currently at
+				if (test >= 0) { // if stock remaining is greater than or equal to 0
+
+					// turning stock remaining back into a string to insert it back in the List
+					String strTest = test + "";
+					// inserting stock remaining back into List
+					inventoryLog.get(snackLocationEntered).set(3, strTest);
+
+					/// totalBalance minus the price(From list), is the new total balance
+					totalBalance -= Double.parseDouble(inventoryLog.get(snackLocationEntered).get(1));
+
+					// if total balance - price is over 0, you can purchase
+					if (totalBalance >= 0) {
 
 
 						// double remainingMoney = totalBalance - price;
-						System.out.println("Found it! You selected " + itemName + " which costs " + price + " and you have " + remainingMoney + " money remaining");
+						System.out.println("Found it! You selected " + inventoryLog.get(snackLocationEntered).get(0) + " which costs " + inventoryLog.get(snackLocationEntered).get(1) + " and you have " + totalBalance + " money remaining");
 
-						// reduce the stock
-						// subtract the price
-						// dispense the itemm
 
-				}else {
-					System.out.println("SOLD OUT");
+					} else {
+						System.out.println("Insufficient Funds"); // totalBalance is less than 0 after purchase
+					}
+					// reduce the stock
+					// subtract the price
+					// dispense the itemm
+
+				} else { // if product has 0 stock remaining
+					test = 0;
+					System.out.println("SOLD OUT"); // stock remaining is 0, product not available
 				}
-		// else statement is sold out
-
-
-
-
-
-
-
-
-
-
-
-
-		/*String location = vendingDetails[0];
-		String itemName = vendingDetails[1];
-		Double price = Double.parseDouble(vendingDetails[2]);
-		String itemType = vendingDetails[3];
-
-// create map that holds a string(Location) and an ArrayList(rest of info)
-		Map<String, ArrayList<String>> inventoryLog = new TreeMap<>();
-		List locationElements = new ArrayList();
-		locationElements.set(0, itemName);
-		locationElements.set(1, price);
-		locationElements.set(2, itemType);
-		locationElements.set(3, remainingStock);
-
-		inventoryLog.put(location, (ArrayList<String>) locationElements);
-*/
-
-			// vendingDetails[0].equals(locationEntered.nextLine());
-						/* if (vendingDetails[0].contains(snackLocationEntered) && vendingDetails[3].contains("Chip")) {
-							System.out.println("Found it! You selected " + itemName + " which is " + price + " and you have " + (totalBalance - price) + " money remaining" + "\n" + "Crunch Crunch, Yum!");
-							System.out.println(inventoryLog.get("A1"));
-
-						} else if (vendingDetails[0].contains(snackLocationEntered.toUpperCase()) && vendingDetails[3].contains("Candy")) {
-							System.out.println("Found it! You selected " + itemName + " which is " + price + " and you have " + (totalBalance - price) + " money remaining" + "\n" + "Munch Munch, Yum");
-						} else if (vendingDetails[0].contains(snackLocationEntered.toUpperCase()) && vendingDetails[3].contains("Drink")) {
-							System.out.println("Found it! You selected " + itemName + " which is " + price + " and you have " + (totalBalance - price) + " money remaining" + "\n" + "Glug Glug, Yum!");
-						} else if (vendingDetails[0].contains(snackLocationEntered.toUpperCase()) && vendingDetails[3].contains("Gum")) {
-							System.out.println("Found it! You selected " + itemName + " which is " + price + " and you have " + (totalBalance - price) + " money remaining" + "\n" + "Chew Chew, Yum!");
-						} else {
-							System.out.println("Invalid option");
-						}
-					} */
-
-		/*	// dispense message for itemType
-			if (vendingDetails[3].equals("Chip")) {
-				System.out.println("Crunch Crunch, Yum!");
+			} else {
+				System.out.println("Product not Found"); // product location entered by customer not found
 			}
-			if (vendingDetails[3].equals("Candy")) {
-				System.out.println("Munch Munch, Yum!");
+			if (inventoryLog.get(snackLocationEntered).contains("Chip")) {
+				System.out.println(inventoryLog.get(snackLocationEntered).get(2).replace("Chip", "Crunch Crunch, Yum!"));
 			}
-			if (vendingDetails[3].equals("Drink")) {
-				System.out.println("Glug Glug, Yum!");
+			if (inventoryLog.get(snackLocationEntered).contains("Candy")) {
+				System.out.println(inventoryLog.get(snackLocationEntered).get(2).replace("Candy", "Munch Munch, Yum!"));
 			}
-			if (vendingDetails[3].equals("Gum")) {
-				System.out.println("Chew Chew, Yum!");
+			if (inventoryLog.get(snackLocationEntered).contains("Gum")) {
+				System.out.println(inventoryLog.get(snackLocationEntered).get(2).replace("Gum", "Chew Chew, Yum!"));
 			}
-		*/
-			// end of while loop
+			if (inventoryLog.get(snackLocationEntered).contains("Drink")) {
+				System.out.println(inventoryLog.get(snackLocationEntered).get(2).replace("Drink", "Glug Glug, Yum!"));
+			}
 
-		} // end of selection process!!!
+purchaseItems(); // return to purchase menu
+
+return SelectProduct();
+		}
+
+	public void finishTransaction() { // finish transaction and get change back and return to main menu. Did not complete this part.
+	}
 
 
 
