@@ -263,10 +263,14 @@ public class VendingMachineCLI  {
 
 				} else { // if product has 0 stock remaining
 					test = 0;
-					System.out.println("SOLD OUT"); // stock remaining is 0, product not available
+					System.out.println("SOLD OUT");// stock remaining is 0, product not available
+					System.out.println("Current Money Provided: " + "$" + totalBalance);
+					purchaseItems();
 				}
+
 			} else {
-				System.out.println("Product not Found"); // product location entered by customer not found
+				System.out.println("Product not Found" + "\n" + "Current Money Provided: " + "$" + totalBalance); // product location entered by customer not found
+				purchaseItems();
 			}
 			if (inventoryLog.get(snackLocationEntered).contains("Chip")) {
 				System.out.println(inventoryLog.get(snackLocationEntered).get(2).replace("Chip", "Crunch Crunch, Yum!"));
@@ -286,13 +290,22 @@ purchaseItems(); // return to purchase menu
 return SelectProduct();
 		}
 
-	public void finishTransaction() { // finish transaction and get change back and return to main menu. Did not complete this part.
+	public void finishTransaction() throws IOException {
+		// finish transaction and get change back and return to main menu. Did not complete this part.
+
+
+
+		run();
+
+
+
 	}
 
 
 
-			public void endMethodProcessing () { // static attribute used as method is not associated with specific object instance
+			public void endMethodProcessing () throws IOException { // static attribute used as method is not associated with specific object instance
 				// Any processing that needs to be done before method ends
+				finishTransaction();
 
 
 			} // END OF METHOD PROCESSING
