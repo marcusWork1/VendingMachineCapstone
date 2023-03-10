@@ -292,9 +292,6 @@ return SelectProduct();
 
 	public void finishTransaction() throws IOException {
 		// finish transaction and get change back and return to main menu. Did not complete this part.
-
-
-
 		run();
 
 
